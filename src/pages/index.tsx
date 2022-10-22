@@ -12,6 +12,7 @@ const Home: NextPage = () => {
       </Head>
 
       <div className={"flex flex-col h-screen"}>
+        <Navbar currentPage="dashboard"/>
         <main className="container mx-auto flex-auto flex-col items-center justify-center p-4">
         </main>
         <footer className="flex-[0_1_20px] text-center h-6 bg-gray-600 text-white text-xs">
