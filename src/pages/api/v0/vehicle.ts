@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../server/db/client";
 import { z } from "zod";
+import { useState } from "react";
 
 const vehicleReqSchema = z.object({
   vehicle_serial: z.string().optional(),
@@ -20,27 +21,30 @@ const vehicle = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
+  const where = {
+    vehicle_serial: query.data.vehicle_serial,
+    vehicle_type: query.data.vehicle_type,
+    vehicle_class: query.data.vehicle_class,
+    user_emails: query.data.user_email ? {
+      hasSome: query.data.user_email,
+    } : undefined,
+  }
+
   const vehicles = await prisma.vehicle.findMany({
-    where: {
-      vehicle_serial: query.data.vehicle_serial,
-      vehicle_type: query.data.vehicle_type,
-      vehicle_class: query.data.vehicle_class,
-      user_emails: query.data.user_email ? {
-        hasSome: query.data.user_email,
-      } : undefined,
-    },
+    where: where,
+    skip: (query.data.page_number - 1) * query.data.per_page,
+    take: query.data.per_page,
   });
+
+  const total = await prisma.vehicle.count({where: where});
 
   res.status(200).json({
     pagination: {
       current_page: query.data.page_number,
       max_per_page: query.data.per_page,
-      total_pages: Math.ceil(vehicles.length / query.data.per_page),
+      total_pages: Math.ceil(total / query.data.per_page),
     },
-    vehicles: vehicles.slice(
-      (query.data.page_number - 1) * query.data.per_page,
-      query.data.page_number * query.data.per_page
-    ),
+    vehicles: vehicles
   });
 };
 
