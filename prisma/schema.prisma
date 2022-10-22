@@ -10,8 +10,78 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  first_name        String
+  last_name         String
+  organization_role String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  Flight            Flight[]
+  Media             Media[]
+}
+
+model Vehicle {
+  vehicle_serial       String   @id @default(cuid())
+  vehicle_type         String
+  vehicle_class        String
+  vehicle_number       String
+  charing              Boolean
+  battery_level        Int
+  flight_status        String
+  is_online            Boolean
+  is_online_via_mobile Boolean
+  remote_stream_state  String
+  files_to_upload      Int
+  uploading            Boolean
+  user_emails          String[]
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  Flight               Flight[]
+}
+
+model Scan {
+  scan_id                 String   @id @default(cuid())
+  name                    String
+  description             String
+  altitude                Float
+  latitude                Float
+  longitude               Float
+  photo_count             Int
+  scan_time               DateTime
+  viewpoint_media_id      String
+  viewpoint_media         Media    @relation(fields: [viewpoint_media_id], references: [id])
+  viewpoint_thumbnail_url String
+  flight_id               String
+  flight                  Flight   @relation(fields: [flight_id], references: [id])
+}
+
+model Media {
+  id             String   @id @default(cuid())
+  download_url   String
+  filename       String
+  kind           String
+  size           Int
+  flight_id      String
+  flight         Flight   @relation(fields: [flight_id], references: [id])
+  mission_run_id String
+  user_id        String
+  user           User     @relation(fields: [user_id], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  Scan           Scan[]
+}
+
+model Flight {
+  id             String   @id @default(cuid())
+  has_telemetry  Boolean
+  landing        DateTime
+  takeoff        DateTime
+  user_email     String
+  user           User     @relation(fields: [user_email], references: [email])
+  vehicle_serial String
+  vehicle        Vehicle  @relation(fields: [vehicle_serial], references: [vehicle_serial])
+  Scan           Scan[]
+  Media          Media[]
 }
