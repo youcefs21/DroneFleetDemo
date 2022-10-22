@@ -52,7 +52,7 @@ model Scan {
   photo_count             Int
   scan_time               DateTime
   viewpoint_media_id      String
-  viewpoint_media         Media    @relation(fields: [viewpoint_media_id], references: [id])
+  files                   Media[]
   viewpoint_thumbnail_url String
   flight_id               String
   flight                  Flight   @relation(fields: [flight_id], references: [id])
@@ -78,7 +78,8 @@ model Media {
   user           User       @relation(fields: [user_id], references: [id])
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
-  Scan           Scan[]
+  scan_id        String
+  scan           Scan       @relation(fields: [scan_id], references: [scan_id])
 }
 
 model MissionRun {
@@ -125,6 +126,6 @@ model Flight {
   user           User     @relation(fields: [user_email], references: [email])
   vehicle_serial String
   vehicle        Vehicle  @relation(fields: [vehicle_serial], references: [vehicle_serial])
-  Scan           Scan[]
-  Media          Media[]
+  scans          Scan[]
+  media          Media[]
 }
