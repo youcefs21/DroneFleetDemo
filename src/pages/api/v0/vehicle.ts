@@ -28,10 +28,20 @@ const vehicle = async (req: NextApiRequest, res: NextApiResponse) => {
       user_emails: query.data.user_email ? {
         hasSome: query.data.user_email,
       } : undefined,
-    }
+    },
   });
 
-  res.status(200).json(vehicles);
+  res.status(200).json({
+    pagination: {
+      current_page: query.data.page_number,
+      max_per_page: query.data.per_page,
+      total_pages: Math.ceil(vehicles.length / query.data.per_page),
+    },
+    vehicles: vehicles.slice(
+      (query.data.page_number - 1) * query.data.per_page,
+      query.data.page_number * query.data.per_page
+    ),
+  });
 };
 
 export default vehicle;
