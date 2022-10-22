@@ -6,7 +6,9 @@ import { z } from "zod";
 const reqSchema = z.object({
   vehicle_serial: z.string().optional(),
   flight_id: z.string().optional(),
-  kind: z.array(z.string()).optional(),
+  kind: z.array(z.enum([
+    "vehicleVideoRaw", "vehicleImageDng", "videoTelemetryCsv", "undisortedImage", "vehicleVideoPreview", "photogrammetryMesh", "vehicleImage"
+  ])).optional(),
   uploaded_before: z.string().optional(),
   uploaded_since: z.string().optional(),
   pre_signed_download_url: z.boolean().optional(),
