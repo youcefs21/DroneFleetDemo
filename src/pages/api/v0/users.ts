@@ -4,10 +4,10 @@ import { z } from "zod";
 
 
 const reqSchema = z.object({
-  first_name: z.string(),
-  last_name: z.string(),
-  email: z.string(),
-  organization_role: z.enum(["UNKNOWN", "MEMBER", "TESTER", "MODERATOR", "ADMIN"]),
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  email: z.string().optional(),
+  organization_role: z.enum(["UNKNOWN", "MEMBER", "TESTER", "MODERATOR", "ADMIN"]).optional(),
   page_number: z.number().int().default(1),
   per_page: z.number().int().default(25),
 });
