@@ -20,13 +20,14 @@ model User {
   updatedAt         DateTime @updatedAt
   Flight            Flight[]
   Media             Media[]
+  Scan              Scan[]
 }
 
 model Vehicle {
   vehicle_serial       String   @id @default(cuid())
   vehicle_type         String
   vehicle_class        String
-  charging              Boolean
+  charging             Boolean
   battery_level        Int
   flight_status        String
   is_online            Boolean
@@ -38,6 +39,7 @@ model Vehicle {
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
   Flight               Flight[]
+  Scan                 Scan[]
 }
 
 model Scan {
@@ -54,6 +56,12 @@ model Scan {
   viewpoint_thumbnail_url String
   flight_id               String
   flight                  Flight   @relation(fields: [flight_id], references: [id])
+  user_id                 String
+  user                    User     @relation(fields: [user_id], references: [id])
+  vehicle_serial          String
+  vehicle                 Vehicle  @relation(fields: [vehicle_serial], references: [vehicle_serial])
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
 
 model Media {
