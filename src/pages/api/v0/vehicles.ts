@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../server/db/client";
 import { z } from "zod";
-import { useState } from "react";
 
 const vehicleReqSchema = z.object({
   vehicle_serial: z.string().optional(),
@@ -13,7 +12,7 @@ const vehicleReqSchema = z.object({
   per_page: z.number().int().default(25),
 });
 
-const vehicle = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = vehicleReqSchema.safeParse(req.query);
 
   if (!query.success) {
@@ -48,4 +47,4 @@ const vehicle = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 };
 
-export default vehicle;
+export default handler;
