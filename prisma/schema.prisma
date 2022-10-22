@@ -26,8 +26,7 @@ model Vehicle {
   vehicle_serial       String   @id @default(cuid())
   vehicle_type         String
   vehicle_class        String
-  vehicle_number       String
-  charing              Boolean
+  charging              Boolean
   battery_level        Int
   flight_status        String
   is_online            Boolean
