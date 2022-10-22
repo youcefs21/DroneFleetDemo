@@ -65,19 +65,55 @@ model Scan {
 }
 
 model Media {
-  id             String   @id @default(cuid())
+  id             String     @id @default(cuid())
   download_url   String
   filename       String
   kind           String
   size           Int
   flight_id      String
-  flight         Flight   @relation(fields: [flight_id], references: [id])
+  flight         Flight     @relation(fields: [flight_id], references: [id])
   mission_run_id String
+  mission_run    MissionRun @relation(fields: [mission_run_id], references: [id])
   user_id        String
-  user           User     @relation(fields: [user_id], references: [id])
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  user           User       @relation(fields: [user_id], references: [id])
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   Scan           Scan[]
+}
+
+model MissionRun {
+  id                  String            @id @default(cuid())
+  mission_template_id String
+  mission_template    MissionTemplate   @relation(fields: [mission_template_id], references: [id])
+  mission_waypoints   MissionWaypoint[]
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  Media               Media[]
+}
+
+model MissionTemplate {
+  id                String            @id @default(cuid())
+  name              String
+  description       String
+  mission_waypoints MissionWaypoint[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  MissionRun        MissionRun[]
+}
+
+model MissionWaypoint {
+  id                  String           @id @default(cuid())
+  name                String
+  description         String
+  altitude            Float
+  latitude            Float
+  longitude           Float
+  mission_run_id      String?
+  mission_run         MissionRun?      @relation(fields: [mission_run_id], references: [id])
+  mission_template_id String?
+  mission_template    MissionTemplate? @relation(fields: [mission_template_id], references: [id])
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
 }
 
 model Flight {
