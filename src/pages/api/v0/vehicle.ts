@@ -25,9 +25,9 @@ const vehicle = async (req: NextApiRequest, res: NextApiResponse) => {
       vehicle_serial: query.data.vehicle_serial,
       vehicle_type: query.data.vehicle_type,
       vehicle_class: query.data.vehicle_class,
-      user_emails: {
-        has: query.data.user_email,
-      },
+      user_emails: query.data.user_email ? {
+        hasSome: query.data.user_email,
+      } : undefined,
     }
   });
 
