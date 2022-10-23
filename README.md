@@ -1,5 +1,7 @@
-# Drone Fleet Manager MVP Demo
+# Drone Fleet Manager API
 
-This repository contains the code for a Drone Fleet Manager MVP demo. Built within 48 hours for my application to Skydio's "Software Engineer Intern - Full Stack" position.
+this is a clone of Skydio Cloud API, with redis caching. The base path is [https://dronefleet.vercel.app/api/v0](https://dronefleet.vercel.app/api/v0)
+
+Documentation is available at [https://cloud.skydio.com/documentation](https://cloud.skydio.com/documentation)
 
 
