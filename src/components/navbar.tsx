@@ -35,18 +35,6 @@ export const Navbar: navbarType = ({currentPage}) => {
           <img className="block h-8 w-auto rounded" src="/favicon.ico"/>
         </div>
         <div className="flex place-items-center gap-2">
-          <NavItem href="/" currentPage={currentPage} pageName="dashboard">
-            Dashboard
-          </NavItem>
-          <NavItem href="/controls" currentPage={currentPage} pageName="batchControls">
-            Batch Controls
-          </NavItem>
-          <NavItem href="/assets" currentPage={currentPage} pageName="assets">
-            Assets
-          </NavItem>
-          <NavItem href="/3d-reconstruction" currentPage={currentPage} pageName="3DReconstruction">
-            3D Reconstructions
-          </NavItem>
         </div>
       </div>
     </nav>
