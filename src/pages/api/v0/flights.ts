@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../server/db/client";
 import { z } from "zod";
+import { createRedisInstance } from "../../../server/redis";
 
 
 const reqSchema = z.object({
@@ -17,6 +18,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!query.success) {
     res.status(400).json({ errors: query.error.issues });
     return;
+  }
+  const redis = createRedisInstance();
+  const key = `flights:${JSON.stringify(req.query)}`;
+  const cached = await redis.get(key);
+
+  if (cached) {
+    return res.status(200).json(JSON.parse(cached));
   }
 
   const where = {
@@ -35,14 +43,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const total = await prisma.flight.count({where: where});
 
-  res.status(200).json({
+  const out = {
     pagination: {
       current_page: query.data.page_number,
       max_per_page: query.data.per_page,
       total_pages: Math.ceil(total / query.data.per_page),
     },
     flights: flights
-  });
+  }
+
+  await redis.set(key, JSON.stringify(out), `PX`, 60_000 * 60);
+  res.status(200).json(out);
 }
 
 
